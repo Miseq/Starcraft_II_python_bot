@@ -22,13 +22,14 @@ class SentendBot(sc2.BotAI):
         for nexus in self.units(NEXUS).ready.noqueue:
             if self.can_afford(PROBE):
                 await self.do(nexus.train(PROBE))
-
+            #TODO limit workers per nexus
 
     async def build_pylons(self):
         if self.supply_left < 5 and not self.already_pending(PYLON):
             where_to_build = self.check_pylons()
             if self.can_afford(PYLON):
                 await self.build(PYLON, near=where_to_build, max_distance=50)
+                #TODO limit pylons to 200 population
 
     def check_pylons(self):
         if self.units(PYLON).amount > 0:
@@ -39,6 +40,7 @@ class SentendBot(sc2.BotAI):
     async def expand(self):
         if self.units(NEXUS).amount < 3 and self.can_afford(NEXUS):
             await self.expand_now()
+            #IT's perfect <crying>
 
 
     async def build_assimilator(self):
@@ -69,6 +71,7 @@ class SentendBot(sc2.BotAI):
                 await self.do(gw.train(ZEALOT))
             elif self.can_afford(STALKER):
                 await self.do(gw.train(STALKER))
+            #TODO there has to be a simpler way
 
     async def fight(self):
         if self.units(STALKER).amount > 3:
@@ -79,7 +82,7 @@ class SentendBot(sc2.BotAI):
         elif self.units(ZEALOT).amount > 0 and len(self.known_enemy_units) > 0:
             for unit in self.units(ZEALOT).idle:
                 await self.do(unit.attack(self.known_enemy_units[-1]))
-
+        #TODO it sucks
     def find_enemy(self, state):
         if len(self.known_enemy_units) > 0:
             return random.choice(self.known_enemy_units)
